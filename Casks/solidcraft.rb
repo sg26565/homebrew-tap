@@ -15,6 +15,7 @@ cask "solidcraft" do
   depends_on :macos
 
   app "SolidCraft.app"
+  binary "#{appdir}/SolidCraft.app/Contents/MacOS/solidcraft-cli"
 
   zap trash: [
     "~/Library/Application Support/solidcraft",
