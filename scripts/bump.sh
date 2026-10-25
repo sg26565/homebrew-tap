@@ -14,6 +14,8 @@ if [ "$version" = "$current" ]; then
   exit 0
 fi
 
+scripts/gen-versioned.sh "$current"   # keep the superseded release installable as solidcraft@$current
+
 dmg="solidcraft-$version-macos-universal.dmg"
 sha=$(gh release download "$tag" -R "$repo" -p SHA256SUMS.txt -O - | awk -v f="$dmg" '$2 == f {print $1}')
 [ -n "$sha" ] || { echo "no checksum for $dmg" >&2; exit 1; }

@@ -22,8 +22,9 @@ jobs:
           brew tap-new --no-git local/test >/dev/null
           tap=$(brew --repository local/test)
           mkdir -p "$tap/Casks"
-          cp Casks/solidcraft.rb "$tap/Casks/"
-          brew audit --cask --online local/test/solidcraft
+          cp Casks/*.rb "$tap/Casks/"
+          brew audit --cask --online local/test/solidcraft \
+            $(git ls-files --others --exclude-standard Casks | sed -E "s|Casks/(.*)\.rb|local/test/\1|")
           brew install --cask local/test/solidcraft
           brew uninstall --cask local/test/solidcraft
       - name: Commit
@@ -32,5 +33,6 @@ jobs:
           version=$(sed -n 's/^  version "\(.*\)"/\1/p' Casks/solidcraft.rb)
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "solidcraft $version"
+          git add -A
+          git commit -m "solidcraft $version"
           git push
