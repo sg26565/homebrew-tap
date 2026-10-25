@@ -17,6 +17,13 @@ cask "solidcraft" do
   app "SolidCraft.app"
   binary "#{appdir}/SolidCraft.app/Contents/MacOS/solidcraft-cli"
 
+  # Releases are ad-hoc signed and not notarized yet, so Gatekeeper would block the first launch.
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:           ["-dr", "com.apple.quarantine", "{{appdir}}/SolidCraft.app"],
+        writable_paths: ["{{appdir}}/SolidCraft.app"]
+  end
+
   zap trash: [
     "~/Library/Application Support/solidcraft",
     "~/Library/Caches/solidcraft",
